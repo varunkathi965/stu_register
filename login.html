@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Academic Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ✅ BEST FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:'Inter',system-ui,Arial,sans-serif;
+}
+
+/* ===== BACKGROUND ===== */
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(-45deg,#ecf9fb,#e6f2ff,#fef6ff,#e0f7fa);
+  background-size:400% 400%;
+  animation:bgMove 18s ease infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  transition:.5s;
+}
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+body.dark{
+  background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1b1b1b);
+  color:#fff;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+  width:100%;
+  max-width:1200px;
+  padding:40px 60px;
+  z-index:2;
+}
+.section{display:none}
+.section.active{display:block}
+
+/* ===== FORM CARD ===== */
+.form-card{
+  max-width:480px;
+  background:#fff;
+  padding:28px;
+  border-radius:16px;
+  box-shadow:0 16px 30px rgba(0,0,0,.14);
+  margin:auto;
+}
+body.dark .form-card{
+  background:#1e1e1e;
+}
+
+/* ===== FIELDS ===== */
+.field{
+  display:flex;
+  flex-direction:column;
+  margin-bottom:14px;
+}
+.field label{
+  font-size:13px;
+  margin-bottom:6px;
+  opacity:.85;
+}
+body.dark .field label{
+  color:#fff;
+}
+
+.field input,.field select{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  font-size:14px;
+  background:#f9f9f9;
+}
+.field input:focus,.field select:focus{
+  outline:none;
+  border-color:#6c63ff;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(108,99,255,.2);
+}
+
+/* ✅ DARK MODE INPUT FIX */
+body.dark .field input,
+body.dark .field select{
+  background:#2a2a2a;
+  border:1px solid #fff;
+  color:#fff;
+}
+
+/* ===== BUTTONS ===== */
+.btn{
+  width:100%;
+  background:linear-gradient(135deg,#ff4d5a,#ff6b81);
+  color:#fff;
+  border:none;
+  padding:13px;
+  border-radius:12px;
+  font-size:15px;
+  cursor:pointer;
+}
+.btn.secondary{
+  background:linear-gradient(135deg,#1abc9c,#16a085);
+}
+
+/* ===== OPTIONS ===== */
+.option{
+  max-width:480px;
+  margin:10px auto;
+  padding:14px;
+  border-radius:12px;
+  background:#fff;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+.option:hover{
+  transform:translateY(-2px);
+}
+body.dark .option{
+  background:#1e1e1e;
+  border:1px solid #fff;
+}
+
+/* ===== DASHBOARD ===== */
+.big-btns{
+  display:flex;
+  gap:20px;
+  max-width:480px;
+  margin:auto;
+}
+.big-btns button{
+  height:80px;
+  font-size:18px;
+}
+
+/* ===== PDF & LINKS ===== */
+iframe{
+  width:100%;
+  height:65vh;
+  border:none;
+  border-radius:12px;
+}
+.links a{
+  display:block;
+  margin:10px auto;
+  max-width:480px;
+  padding:12px;
+  border-radius:12px;
+  background:#fff;
+  text-decoration:none;
+  color:#0066cc;
+}
+body.dark .links a{
+  background:#1e1e1e;
+  color:#fff;
+  border:1px solid #fff;
+}
+
+/* ===== DARK MODE BUTTON ===== */
+#darkToggle{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#000;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:18px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- REGISTER -->
+<div class="section active" id="register">
+  <h2 style="text-align:center">Create Account</h2>
+  <div class="form-card">
+    <div class="field"><label>Full Name</label><input></div>
+    <div class="field"><label>Email</label><input id="regEmail"></div>
+    <div class="field"><label>Password</label><input type="password" id="regPass"></div>
+    <div class="field"><label>Confirm Password</label><input type="password" id="regConfirm"></div>
+    <button class="btn" onclick="register()">Register</button>
+    <p style="text-align:center;margin-top:10px">
+      Already registered?
+      <a href="#" onclick="go('login')">Login</a>
+    </p>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="section" id="login">
+  <h2 style="text-align:center">Login</h2>
+  <div class="form-card">
+    <div class="field"><label>Email</label><input id="logEmail"></div>
+    <div class="field"><label>Password</label><input type="password" id="logPass"></div>
+    <button class="btn" onclick="login()">Login</button>
+  </div>
+</div>
+
+<!-- INSTITUTE -->
+<div class="section" id="institute">
+  <h2 style="text-align:center">Select Institute</h2>
+  <div class="option" onclick="chooseInstitute('JNTUA')">JNTUA</div>
+  <div class="option" onclick="chooseInstitute('JNTUK')">JNTUK</div>
+  <div class="option" onclick="chooseInstitute('JNTUH')">JNTUH</div>
+  <div class="option" onclick="chooseInstitute('AUTONOMOUS')">AUTONOMOUS</div>
+</div>
+
+<!-- COLLEGE -->
+<div class="section" id="college">
+  <h2 style="text-align:center">College Name</h2>
+  <div class="form-card">
+    <div class="field"><label>College</label><input id="collegeName"></div>
+    <button class="btn" onclick="saveCollege()">Continue</button>
+  </div>
+</div>
+
+<!-- BRANCH -->
+<div class="section" id="branch">
+  <h2 style="text-align:center">Select Branch</h2>
+  <div class="option" onclick="saveBranch('CSE')">CSE</div>
+  <div class="option" onclick="saveBranch('ECE')">ECE</div>
+  <div class="option" onclick="saveBranch('EEE')">EEE</div>
+  <div class="option" onclick="saveBranch('CIVIL')">CIVIL</div>
+</div>
+
+<!-- YEAR & SEM -->
+<div class="section" id="yearsem">
+  <h2 style="text-align:center">Select Year & Semester</h2>
+  <div class="form-card">
+    <div class="field">
+      <label>Year</label>
+      <select id="yearSelect" onchange="loadSemesters()">
+        <option value="">Select Year</option>
+        <option>1st Year</option>
+        <option>2nd Year</option>
+        <option>3rd Year</option>
+        <option>4th Year</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Semester</label>
+      <select id="semSelect">
+        <option value="">Select Semester</option>
+      </select>
+    </div>
+    <button class="btn" onclick="go('dashboard')">Continue</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="section" id="dashboard">
+  <h2 style="text-align:center">Dashboard</h2>
+  <div class="big-btns">
+    <button class="btn" onclick="go('syllabus')">📘 Syllabus</button>
+    <button class="btn secondary" onclick="go('results')">📊 Results</button>
+  </div>
+</div>
+
+<!-- SYLLABUS -->
+<div class="section" id="syllabus">
+  <h2 style="text-align:center">Syllabus</h2>
+  <iframe src="https://drive.google.com/file/d/1Xn7i5xvzgcRXmVwlA6YaJJCpbl6viKOc/preview"></iframe>
+  <button class="btn" onclick="go('dashboard')">Back</button>
+</div>
+
+<!-- RESULTS -->
+<div class="section" id="results">
+  <h2 style="text-align:center">Results</h2>
+  <div class="links">
+    <a target="_blank" href="https://jntuaresults.ac.in/view-results?resultSetId=9a5b80ee-a6c3-47db-a410-1c5c7999b6a2">Result Set 1</a>
+    <a target="_blank" href="https://jntuaresults.ac.in/view-results?resultSetId=5937d858-dade-40ca-acf3-9801a481d7bb">Result Set 2</a>
+    <a target="_blank" href="https://jntuaresults.ac.in/view-results?resultSetId=caaa00f6-ec21-4670-8d29-3de1e1263981">Result Set 3</a>
+  </div>
+  <button class="btn" onclick="go('dashboard')">Back</button>
+</div>
+
+</div>
+
+<button id="darkToggle">🌙 Dark</button>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyD1dQZR4u6rJI1iWCOWe5HWypPNzwLWmek",
+  authDomain:"students-syllabus.firebaseapp.com",
+  projectId:"students-syllabus"
+});
+const auth=firebase.auth();
+
+/* AUTH */
+function register(){
+  if(regPass.value!==regConfirm.value){
+    alert("Passwords do not match");return;
+  }
+  auth.createUserWithEmailAndPassword(regEmail.value,regPass.value)
+    .then(()=>go('login'))
+    .catch(e=>alert(e.message));
+}
+function login(){
+  auth.signInWithEmailAndPassword(logEmail.value,logPass.value)
+    .then(()=>go('institute'))
+    .catch(e=>alert(e.message));
+}
+
+/* FLOW */
+function go(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function chooseInstitute(i){ i==="AUTONOMOUS"?go('college'):go('branch'); }
+function saveCollege(){ go('branch'); }
+function saveBranch(){ go('yearsem'); }
+
+/* YEAR → SEM LOGIC */
+function loadSemesters(){
+  const y=yearSelect.value;
+  semSelect.innerHTML='<option value="">Select Semester</option>';
+  if(!y) return;
+  const map={
+    "1st Year":["Sem 1","Sem 2"],
+    "2nd Year":["Sem 3","Sem 4"],
+    "3rd Year":["Sem 5","Sem 6"],
+    "4th Year":["Sem 7","Sem 8"]
+  };
+  map[y].forEach(s=>{
+    const o=document.createElement("option");
+    o.textContent=s;
+    semSelect.appendChild(o);
+  });
+}
+
+/* DARK MODE */
+darkToggle.onclick=()=>{
+  document.body.classList.toggle("dark");
+  darkToggle.textContent=document.body.classList.contains("dark")?"☀ Light":"🌙 Dark";
+};
+</script>
+
+</body>
+</html>
